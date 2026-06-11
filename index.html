@@ -13,6 +13,7 @@
     --spider-blue: #00e5ff;
     --bg-main: #04040a;
     --panel: #101020;
+    --panel-alt: #151533;
     --text-main: #f5f5ff;
     --text-dim: #a5b0d8;
   }
@@ -93,7 +94,7 @@
     flex-wrap: wrap;
     gap: 12px;
     align-items: center;
-    margin: 14px 0 24px;
+    margin: 14px 0 10px;
   }
 
   .search-wrapper {
@@ -116,6 +117,10 @@
       inset 0 0 8px rgba(255, 34, 87, 0.25);
   }
 
+  .search-wrapper input::placeholder {
+    color: #8790b8;
+  }
+
   .search-wrapper button {
     border: none;
     border-radius: 10px;
@@ -130,20 +135,41 @@
       0 0 16px rgba(0, 229, 255, 0.6);
   }
 
-  .top-tags {
+  .top-right {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 220px;
+  }
+
+  .top-tags,
+  .search-history {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 6px;
     font-size: 11px;
   }
 
   .chip {
-    padding: 6px 10px;
+    padding: 5px 9px;
     border-radius: 999px;
-    border: 1px solid rgba(0, 229, 255, 0.5);
+    border: 1px solid rgba(0, 229, 255, 0.4);
     background: rgba(5, 7, 20, 0.9);
     color: var(--text-dim);
     cursor: pointer;
+  }
+
+  .chip:hover {
+    border-color: #ff2257;
+    color: #fff;
+  }
+
+  .section-header {
+    margin: 14px 4px 6px;
+    font-size: 13px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1px;
   }
 
   .results {
@@ -197,19 +223,30 @@
   .card .playing-pill {
     position: absolute;
     top: 8px;
-    right: 8px;
+    left: 10px;
     border-radius: 999px;
-    background: rgba(255, 34, 87, 0.92);
-    color: #fff;
+    background: rgba(0, 0, 0, 0.8);
+    color: #0f0;
     font-size: 10px;
-    padding: 4px 7px;
+    padding: 3px 6px;
     display: none;
   }
 
   .card.playing .playing-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
+    display: inline-block;
+  }
+
+  .card .like-btn {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    font-size: 14px;
+    cursor: pointer;
+    text-shadow: 0 0 4px rgba(0,0,0,0.8);
+  }
+
+  .card .like-btn.liked {
+    color: #ff66a5;
   }
 
   #player {
@@ -241,7 +278,7 @@
     max-width: 1200px;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: 1.2fr auto 1.2fr;
+    grid-template-columns: 1.4fr auto 1.4fr;
     gap: 12px;
     align-items: center;
   }
@@ -249,6 +286,9 @@
   #nowPlaying .title {
     display: block;
     font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   #nowPlaying .meta {
@@ -337,6 +377,28 @@
     font-size: 11px;
     outline: none;
   }
+
+  .playlist-bar {
+    margin-top: 8px;
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+
+  .playlist-bar span {
+    cursor: pointer;
+    margin-right: 10px;
+  }
+
+  .playlist-bar span.active {
+    color: #ffcccc;
+    text-decoration: underline;
+  }
+
+  @media (max-width: 900px) {
+    .player-inner {
+      grid-template-columns: 1fr;
+    }
+  }
 </style>
 </head>
 
@@ -351,17 +413,27 @@
 <div class="container">
   <div class="top-bar">
     <div class="search-wrapper">
-      <input id="searchInput" placeholder="Search any track and press Enter..." />
+      <input id="searchInput" placeholder="Search a track and press Enter..." />
       <button onclick="searchSongs()">Scan</button>
     </div>
-    <div class="top-tags">
-      <div class="chip" onclick="quickSearch('lofi hip hop')">Lofi</div>
-      <div class="chip" onclick="quickSearch('marvel theme')">Marvel</div>
-      <div class="chip" onclick="quickSearch('spider man soundtrack')">Spider‑Man</div>
-      <div class="chip" onclick="quickSearch('synthwave mix')">Synthwave</div>
+    <div class="top-right">
+      <div class="top-tags">
+        <div class="chip" onclick="quickSearch('lofi hip hop playlist')">Lofi</div>
+        <div class="chip" onclick="quickSearch('marvel soundtrack')">Marvel</div>
+        <div class="chip" onclick="quickSearch('spider man soundtrack')">Spider‑Man</div>
+        <div class="chip" onclick="quickSearch('epic orchestral music')">Epic</div>
+      </div>
+      <div class="search-history" id="historyChips"></div>
     </div>
   </div>
 
+  <div class="playlist-bar">
+    <span id="tab-home" class="active" onclick="showHome()">Home</span>
+    <span id="tab-search" onclick="showSearch()">Search results</span>
+    <span id="tab-liked" onclick="showLiked()">Liked playlist</span>
+  </div>
+
+  <div id="sectionTitle" class="section-header">Recommended for you</div>
   <div class="results" id="results"></div>
 </div>
 
@@ -371,7 +443,7 @@
   <div class="player-inner">
     <div id="nowPlaying">
       <span class="title">No track loaded</span>
-      <span class="meta">Search and click a card to start playback</span>
+      <span class="meta">Search or pick from recommendations</span>
     </div>
 
     <div class="controls">
@@ -408,12 +480,22 @@
 </div>
 
 <script>
+  // ===========================
+  // PUT YOUR API KEY HERE
+  // ===========================
   const API_KEY = 'AIzaSyC8urZivMZBPSBQ5M12LlWO7Njk1nc9b-0';
+  // ===========================
 
+  // YouTube player
   let player;
   let ytReady = false;
   let playerReady = false;
-  let playlist = [];
+
+  // Data
+  let currentListType = 'home'; // 'home' | 'search' | 'liked'
+  let homeList = [];
+  let searchList = [];
+  let likedList = loadLikedFromStorage();
   let currentIndex = -1;
   let shuffle = false;
   let repeat = false;
@@ -449,16 +531,18 @@
     });
   }
 
-  function onPlayerReady(event) {
+  function onPlayerReady(e) {
     playerReady = true;
     const vol = parseInt(document.getElementById("volume").value, 10) || 70;
-    event.target.setVolume(vol);
+    e.target.setVolume(vol);
     setupProgressTimer();
+    loadHomeRecommendations(); // auto-fill home section
+    renderHistoryChips();
   }
 
-  function onPlayerStateChange(event) {
+  function onPlayerStateChange(e) {
     updatePlayPauseButton();
-    if (event.data === YT.PlayerState.ENDED) {
+    if (e.data === YT.PlayerState.ENDED) {
       if (repeat) {
         player.seekTo(0, true);
         player.playVideo();
@@ -468,23 +552,59 @@
     }
   }
 
+  function getActiveList() {
+    if (currentListType === 'search') return searchList;
+    if (currentListType === 'liked') return likedList;
+    return homeList;
+  }
+
   function quickSearch(text) {
     document.getElementById("searchInput").value = text;
     searchSongs();
   }
 
-  async function searchSongs() {
-    const q = document.getElementById("searchInput").value.trim();
-    if (!q) return;
-
+  async function loadHomeRecommendations() {
+    // simple curated query to feel like "home" mixes
+    const q = 'lofi hip hop mix chill beats soundtrack';
     const url =
       'https://www.googleapis.com/youtube/v3/search' +
       '?part=snippet' +
       '&maxResults=24' +
       '&type=video' +
       '&videoCategoryId=10' +
-      '&q=' + encodeURIComponent(q + " official audio") +
+      '&q=' + encodeURIComponent(q) +
       '&key=' + API_KEY;
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
+      if (data.error) {
+        console.error('Home API error', data.error);
+        return;
+      }
+      homeList = data.items || [];
+      if (currentListType === 'home') {
+        renderList(homeList);
+        document.getElementById('sectionTitle').textContent = 'Recommended for you';
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  async function searchSongs() {
+    const q = document.getElementById("searchInput").value.trim();
+    if (!q) return;
+
+    saveSearchHistory(q);
+
+    const url =
+      'https://www.googleapis.com/youtube/v3/search' +
+      '?part=snippet' +
+      '&maxResults=24' +
+      '&type=video' +
+      '&videoCategoryId=10' + // music category [web:48]
+      '&q=' + encodeURIComponent(q + " official audio") + // bias toward audio-style results
+      '&key=' + API_KEY; // [web:47]
 
     try {
       const res = await fetch(url);
@@ -494,50 +614,61 @@
         console.error(data.error);
         return;
       }
-      playlist = data.items || [];
-      currentIndex = -1;
-      renderResults();
-      updatePlayingIndicator();
+      searchList = data.items || [];
+      currentListType = 'search';
+      setTabActive('search');
+      renderList(searchList);
+      document.getElementById('sectionTitle').textContent = `Results for "${q}"`;
     } catch (err) {
       console.error(err);
       alert("Network error while calling YouTube.");
     }
   }
 
-  function renderResults() {
+  function renderList(list) {
     const container = document.getElementById("results");
     container.innerHTML = "";
-    playlist.forEach((item, index) => {
+    list.forEach((item, index) => {
       const title = item.snippet?.title || "Unknown track";
       const channel = item.snippet?.channelTitle || "Unknown channel";
       const thumb = item.snippet?.thumbnails?.medium?.url ||
                     item.snippet?.thumbnails?.default?.url || "";
+      const videoId = item.id?.videoId || item.id;
+
       const card = document.createElement("div");
       card.className = "card";
+      card.dataset.index = index;
       card.innerHTML = `
+        <div class="playing-pill">● Playing</div>
+        <span class="like-btn ${isLiked(videoId) ? "liked" : ""}" onclick="toggleLikeFromCard(event,'${videoId}')">♥</span>
         <img src="${thumb}" alt="${title}">
         <p>${title}</p>
         <small>${channel}</small>
-        <div class="playing-pill"><span>●</span> Playing</div>
       `;
-      card.onclick = () => playSong(index);
+      card.addEventListener('click', () => playSong(index));
       container.appendChild(card);
     });
+    updatePlayingIndicator();
   }
 
   function updatePlayingIndicator() {
     const cards = document.querySelectorAll(".card");
+    const list = getActiveList();
     cards.forEach((card, i) => {
-      if (i === currentIndex) card.classList.add("playing");
-      else card.classList.remove("playing");
+      if (i === currentIndex && list[currentIndex]) {
+        card.classList.add("playing");
+      } else {
+        card.classList.remove("playing");
+      }
     });
   }
 
   function playSong(index) {
-    if (!playlist.length || !ytReady || !playerReady) return;
-    currentIndex = index;
+    const list = getActiveList();
+    if (!list.length || !ytReady || !playerReady) return;
 
-    const item = playlist[currentIndex];
+    currentIndex = index;
+    const item = list[currentIndex];
     const videoId = item.id?.videoId || item.id;
     const title = item.snippet?.title || "Unknown track";
     const channel = item.snippet?.channelTitle || "Unknown channel";
@@ -549,8 +680,10 @@
 
     updatePlayingIndicator();
 
+    // Avoid lag / wrong‑song: always call loadVideoById BEFORE playVideo, never double‑load
+    player.stopVideo();
     player.loadVideoById(videoId);
-    player.playVideo(); // runs directly from card click (user gesture)
+    player.playVideo();
     updatePlayPauseButton();
   }
 
@@ -573,13 +706,14 @@
   }
 
   function nextSong() {
-    if (!playlist.length) return;
+    const list = getActiveList();
+    if (!list.length) return;
     let nextIndex;
     if (shuffle) {
-      nextIndex = Math.floor(Math.random() * playlist.length);
+      nextIndex = Math.floor(Math.random() * list.length);
     } else {
       nextIndex = currentIndex + 1;
-      if (nextIndex >= playlist.length) {
+      if (nextIndex >= list.length) {
         if (repeat) nextIndex = 0;
         else return;
       }
@@ -588,14 +722,15 @@
   }
 
   function prevSong() {
-    if (!playlist.length) return;
+    const list = getActiveList();
+    if (!list.length) return;
     if (playerReady && player.getCurrentTime() > 3) {
       player.seekTo(0, true);
       return;
     }
     let prevIndex = currentIndex - 1;
     if (prevIndex < 0) {
-      if (repeat) prevIndex = playlist.length - 1;
+      if (repeat) prevIndex = list.length - 1;
       else return;
     }
     playSong(prevIndex);
@@ -663,8 +798,113 @@
     if (e.code === "Space") {
       e.preventDefault();
       togglePlay();
+    } else if (e.code === "ArrowRight") {
+      if (playerReady) player.seekTo(player.getCurrentTime() + 5, true);
+    } else if (e.code === "ArrowLeft") {
+      if (playerReady) player.seekTo(Math.max(0, player.getCurrentTime() - 5), true);
     }
   });
+
+  // Search history using localStorage [web:53][web:56]
+  function loadHistory() {
+    try {
+      const raw = localStorage.getItem('sv_history');
+      if (!raw) return [];
+      return JSON.parse(raw) || [];
+    } catch {
+      return [];
+    }
+  }
+
+  function saveSearchHistory(q) {
+    let history = loadHistory();
+    history = history.filter(item => item.toLowerCase() !== q.toLowerCase());
+    history.unshift(q);
+    if (history.length > 6) history = history.slice(0, 6);
+    localStorage.setItem('sv_history', JSON.stringify(history));
+    renderHistoryChips();
+  }
+
+  function renderHistoryChips() {
+    const history = loadHistory();
+    const container = document.getElementById('historyChips');
+    container.innerHTML = '';
+    history.forEach(term => {
+      const chip = document.createElement('div');
+      chip.className = 'chip';
+      chip.textContent = term;
+      chip.onclick = () => {
+        document.getElementById("searchInput").value = term;
+        searchSongs();
+      };
+      container.appendChild(chip);
+    });
+  }
+
+  // Liked playlist (simple local playlist)
+  function loadLikedFromStorage() {
+    try {
+      const raw = localStorage.getItem('sv_liked');
+      if (!raw) return [];
+      return JSON.parse(raw) || [];
+    } catch {
+      return [];
+    }
+  }
+
+  function saveLikedToStorage() {
+    localStorage.setItem('sv_liked', JSON.stringify(likedList));
+  }
+
+  function isLiked(videoId) {
+    return likedList.some(item => (item.id?.videoId || item.id) === videoId);
+  }
+
+  function toggleLikeFromCard(event, videoId) {
+    event.stopPropagation();
+    const list = getActiveList();
+    const item = list.find(x => (x.id?.videoId || x.id) === videoId);
+    if (!item) return;
+
+    if (isLiked(videoId)) {
+      likedList = likedList.filter(x => (x.id?.videoId || x.id) !== videoId);
+    } else {
+      likedList.push(item);
+    }
+    saveLikedToStorage();
+    renderList(getActiveList());
+  }
+
+  function showHome() {
+    currentListType = 'home';
+    setTabActive('home');
+    renderList(homeList);
+    document.getElementById('sectionTitle').textContent = 'Recommended for you';
+  }
+
+  function showSearch() {
+    currentListType = 'search';
+    setTabActive('search');
+    renderList(searchList);
+    document.getElementById('sectionTitle').textContent = 'Search results';
+  }
+
+  function showLiked() {
+    currentListType = 'liked';
+    setTabActive('liked');
+    renderList(likedList);
+    document.getElementById('sectionTitle').textContent = 'Liked playlist';
+  }
+
+  function setTabActive(tab) {
+    ['home','search','liked'].forEach(id => {
+      const el = document.getElementById('tab-' + id);
+      if (!el) return;
+      el.classList.toggle('active', id === tab);
+    });
+    currentIndex = -1;
+    updatePlayingIndicator();
+  }
 </script>
 
 </body>
