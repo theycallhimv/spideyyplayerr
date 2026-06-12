@@ -3,907 +3,1145 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>SpiderVerse Audio Deck</title>
+<title>V's AUDIO DECK</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 
 <style>
   :root {
-    --spider-red: #ff2257;
-    --spider-blue: #00e5ff;
-    --bg-main: #04040a;
-    --panel: #101020;
-    --panel-alt: #151533;
-    --text-main: #f5f5ff;
-    --text-dim: #a5b0d8;
+    --bg-pure-dark: #050508;
+    --bg-card-panel: #0A0A0F;
+    --stone-space: #00FFFF;
+    --stone-reality: #FF0055;
+    --stone-power: #8A2BE2;
+    --stone-time: #00FF66;
+    --stone-mind: #FFD700;
+    --stone-soul: #FF4500;
+    --text-white: #FFFFFF;
+    --text-muted: #555560;
+    --text-silver: #A0A0A8;
   }
 
-  * { box-sizing: border-box; }
+  * { 
+    box-sizing: border-box; 
+    margin: 0; 
+    padding: 0;
+  }
 
   body {
-    margin: 0;
-    font-family: 'Poppins', sans-serif;
-    background: radial-gradient(circle at 0 0, #190814 0, #04040a 40%, #030309 80%);
-    color: var(--text-main);
-    overflow-x: hidden;
+    background-color: var(--bg-pure-dark);
+    color: var(--text-white);
+    font-family: 'Lato', sans-serif;
     min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
   }
 
+  /* Architectural Technical Grid Overlay */
   body::before {
     content: "";
     position: fixed;
     inset: 0;
-    background:
-      radial-gradient(circle at 10% 0%, rgba(255, 34, 87, 0.16), transparent 50%),
-      radial-gradient(circle at 80% 80%, rgba(0, 229, 255, 0.18), transparent 55%),
-      repeating-linear-gradient(0deg, rgba(0, 229, 255, 0.08) 0px, rgba(0, 229, 255, 0.08) 1px, transparent 1px, transparent 40px),
-      repeating-linear-gradient(90deg, rgba(255, 34, 87, 0.08) 0px, rgba(255, 34, 87, 0.08) 1px, transparent 1px, transparent 40px);
-    mix-blend-mode: screen;
-    opacity: 0.7;
+    background: 
+      linear-gradient(rgba(255, 255, 255, 0.003) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.003) 1px, transparent 1px);
+    background-size: 40px 40px;
     pointer-events: none;
-    z-index: -1;
+    z-index: 1;
   }
 
-  header {
-    padding: 20px 26px 10px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-family: 'Orbitron', sans-serif;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-  }
-
-  header .logo {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    border: 2px solid rgba(255, 34, 87, 0.8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--spider-blue);
-    box-shadow: 0 0 14px rgba(255, 34, 87, 0.7), 0 0 16px rgba(0, 229, 255, 0.6);
-    font-size: 19px;
-    background: radial-gradient(circle at 30% 0, #42001a 0, #05040d 60%);
-  }
-
-  header h1 {
-    margin: 0;
-    font-size: 22px;
-    font-weight: 700;
-    text-shadow: 0 0 14px rgba(255, 34, 87, 0.7);
-  }
-
-  header span.subtitle {
-    margin-left: auto;
-    font-size: 11px;
-    color: var(--text-dim);
-    text-transform: none;
-    opacity: 0.8;
-  }
-
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 6px 18px 120px;
-  }
-
-  .top-bar {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    align-items: center;
-    margin: 14px 0 10px;
-  }
-
-  .search-wrapper {
-    flex: 1 1 260px;
-    display: flex;
-    gap: 8px;
-  }
-
-  .search-wrapper input {
-    flex: 1;
-    padding: 12px 14px;
-    border-radius: 10px;
-    border: 1px solid rgba(0, 229, 255, 0.4);
-    background: rgba(12, 12, 30, 0.9);
-    color: #ffffff;
-    font-size: 14px;
-    outline: none;
-    box-shadow:
-      0 0 10px rgba(0, 229, 255, 0.2),
-      inset 0 0 8px rgba(255, 34, 87, 0.25);
-  }
-
-  .search-wrapper input::placeholder {
-    color: #8790b8;
-  }
-
-  .search-wrapper button {
-    border: none;
-    border-radius: 10px;
-    padding: 11px 18px;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    color: #fff;
-    background: linear-gradient(135deg, #ff2257, #00e5ff);
-    box-shadow:
-      0 0 14px rgba(255, 34, 87, 0.7),
-      0 0 16px rgba(0, 229, 255, 0.6);
-  }
-
-  .top-right {
+  /* Structural UI Shell */
+  .app-container {
+    position: relative;
+    z-index: 2;
     display: flex;
     flex-direction: column;
-    gap: 6px;
-    min-width: 220px;
+    min-height: 100vh;
   }
 
-  .top-tags,
-  .search-history {
+  /* High-End Minimalist Header */
+  header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    padding: 30px 50px;
     display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    font-size: 11px;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--bg-pure-dark);
   }
 
-  .chip {
-    padding: 5px 9px;
-    border-radius: 999px;
-    border: 1px solid rgba(0, 229, 255, 0.4);
-    background: rgba(5, 7, 20, 0.9);
-    color: var(--text-dim);
-    cursor: pointer;
+  .brand-group {
+    display: flex;
+    align-items: center;
+    gap: 20px;
   }
 
-  .chip:hover {
-    border-color: #ff2257;
-    color: #fff;
-  }
-
-  .section-header {
-    margin: 14px 4px 6px;
-    font-size: 13px;
-    color: var(--text-dim);
+  .brand-group h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900;
+    font-size: 16px;
+    letter-spacing: 8px;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    color: var(--text-white);
   }
 
-  .results {
+  .brand-badge {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    border: 1px solid var(--stone-reality);
+    padding: 3px 8px;
+    color: var(--stone-reality);
+    text-transform: uppercase;
+  }
+
+  .system-node-id {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--text-muted);
+  }
+
+  /* Main Workspace Framework Split */
+  .workspace-layout {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-    gap: 18px;
+    grid-template-columns: 260px 1fr;
+    flex: 1;
   }
 
-  .card {
-    position: relative;
-    background: radial-gradient(circle at 0 0, #2b0b20 0, #0b0b1a 40%, #050510 100%);
-    border-radius: 16px;
-    padding: 10px;
+  /* Premium Asymmetric Left Sidebar */
+  aside {
+    border-right: 1px solid rgba(255, 255, 255, 0.04);
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    gap: 45px;
+    background-color: var(--bg-pure-dark);
+  }
+
+  .nav-section-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .nav-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    list-style: none;
+  }
+
+  .nav-link-item {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 3px;
+    color: var(--text-silver);
+    text-transform: uppercase;
     cursor: pointer;
-    border: 1px solid rgba(0, 229, 255, 0.35);
-    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    transition: color 0.3s, transform 0.3s;
+    position: relative;
+    display: flex;
+    align-items: center;
   }
 
-  .card:hover {
-    transform: translateY(-6px);
-    border-color: rgba(255, 34, 87, 0.65);
-    box-shadow:
-      0 0 14px rgba(255, 34, 87, 0.7),
-      0 0 12px rgba(0, 229, 255, 0.5);
+  .nav-link-item:hover, .nav-link-item.active {
+    color: var(--text-white);
+    transform: translateX(4px);
   }
 
-  .card img {
-    width: 100%;
-    border-radius: 12px;
-    display: block;
+  .nav-link-item.active::before {
+    content: "";
+    position: absolute;
+    left: -15px;
+    width: 3px;
+    height: 3px;
+    background-color: var(--stone-space);
+    box-shadow: 0 0 10px var(--stone-space);
   }
 
-  .card p {
-    margin: 10px 2px 0;
-    font-size: 13px;
-    color: var(--text-main);
-    line-height: 1.35;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
+  /* Central Stage Interface Viewport */
+  main {
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    background-color: var(--bg-pure-dark);
+    padding-bottom: 150px;
+  }
+
+  /* Premium Behance-Inspired Cinema Banner Module */
+  .cinema-hero-banner {
+    position: relative;
+    background-color: var(--bg-card-panel);
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    height: 320px;
+    display: flex;
+    align-items: center;
     overflow: hidden;
   }
 
-  .card small {
-    display: block;
-    margin: 4px 2px 3px;
-    font-size: 11px;
-    color: var(--text-dim);
-  }
-
-  .card .playing-pill {
+  /* Technical brackets indicator overlays matching reference */
+  .cinema-hero-banner::before {
+    content: "[ STAGE // CONSOLE_PROP ]";
     position: absolute;
-    top: 8px;
-    left: 10px;
-    border-radius: 999px;
-    background: rgba(0, 0, 0, 0.8);
-    color: #0f0;
-    font-size: 10px;
-    padding: 3px 6px;
-    display: none;
+    top: 20px;
+    left: 20px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 8px;
+    letter-spacing: 3px;
+    color: rgba(255, 255, 255, 0.15);
   }
 
-  .card.playing .playing-pill {
-    display: inline-block;
-  }
-
-  .card .like-btn {
+  .cinema-hero-banner::after {
+    content: "+";
     position: absolute;
-    top: 8px;
-    right: 10px;
+    bottom: 20px;
+    right: 20px;
+    font-family: 'Montserrat', sans-serif;
     font-size: 14px;
-    cursor: pointer;
-    text-shadow: 0 0 4px rgba(0,0,0,0.8);
+    color: rgba(255, 255, 255, 0.1);
   }
 
-  .card .like-btn.liked {
-    color: #ff66a5;
+  .hero-content-cluster {
+    padding: 60px;
+    position: relative;
+    z-index: 3;
+    max-width: 650px;
   }
 
-  #player {
-    position: fixed;
-    width: 1px;
-    height: 1px;
-    opacity: 0;
-    pointer-events: none;
-    left: -9999px;
-    top: -9999px;
+  .hero-mini-tag {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 9px;
+    letter-spacing: 5px;
+    color: var(--stone-space);
+    text-transform: uppercase;
+    margin-bottom: 12px;
   }
 
-  .bottom-player {
-    position: fixed;
-    left: 0;
+  .hero-main-title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900;
+    font-size: 42px;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+    line-height: 1.05;
+    background: linear-gradient(180deg, #FFFFFF 0%, #88888F 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .hero-synopsis {
+    font-size: 13px;
+    color: var(--text-silver);
+    line-height: 1.6;
+    font-weight: 300;
+  }
+
+  .hero-gradient-shroud {
+    position: absolute;
     right: 0;
-    bottom: 0;
-    background: linear-gradient(180deg, rgba(8, 8, 24, 0.98), rgba(3, 3, 10, 0.98));
-    border-top: 1px solid rgba(0, 229, 255, 0.4);
-    backdrop-filter: blur(8px);
-    box-shadow:
-      0 -6px 24px rgba(0, 0, 0, 0.8),
-      0 0 20px rgba(255, 34, 87, 0.3);
-    padding: 10px 14px 14px;
-    z-index: 50;
+    top: 0;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg, var(--bg-card-panel) 0%, transparent 100%);
+    z-index: 2;
   }
 
-  .player-inner {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: 1.4fr auto 1.4fr;
+  /* Sharp Minimalist Search Console Terminal */
+  .terminal-search-box {
+    display: flex;
+    gap: 20px;
+    background-color: var(--bg-pure-dark);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 4px;
+    max-width: 550px;
+    position: relative;
+  }
+
+  .terminal-search-box input {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text-white);
+    padding: 12px 18px;
+    font-family: 'Lato', sans-serif;
+    font-size: 12px;
+    letter-spacing: 1px;
+    flex: 1;
+  }
+
+  .terminal-search-box input::placeholder {
+    color: var(--text-muted);
+  }
+
+  .terminal-search-box button {
+    background-color: var(--text-white);
+    color: var(--bg-pure-dark);
+    border: none;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 3px;
+    padding: 0 28px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+  }
+
+  .terminal-search-box button:hover {
+    background-color: var(--stone-space);
+    color: var(--bg-pure-dark);
+  }
+
+  /* Dynamic Search Query Tags */
+  .history-capsule-row {
+    display: flex;
+    flex-wrap: wrap;
     gap: 12px;
-    align-items: center;
   }
 
-  #nowPlaying .title {
-    display: block;
-    font-weight: 600;
+  .history-capsule {
+    background-color: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 6px 16px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-silver);
+    cursor: pointer;
+    transition: color 0.3s, border-color 0.3s;
+  }
+
+  .history-capsule:hover {
+    color: var(--text-white);
+    border-color: var(--stone-space);
+  }
+
+  /* Architectural Divider Component */
+  .section-headline-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    padding-bottom: 18px;
+  }
+
+  .section-headline-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+  }
+
+  .section-headline-bracket {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 9px;
+    color: var(--text-muted);
+    letter-spacing: 2px;
+  }
+
+  /* Ultra-Premium Cyber Grid Structure & Cards */
+  .cyber-media-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 30px;
+  }
+
+  .cyber-premium-card {
+    background-color: var(--bg-card-panel);
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    position: relative;
+    padding: 16px;
+    cursor: pointer;
+    transition: border-color 0.4s, transform 0.4s, box-shadow 0.4s;
+  }
+
+  /* Precise Technical Corner Accent Bracket Systems */
+  .cyber-premium-card::before {
+    content: "";
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    width: 8px;
+    height: 8px;
+    border-top: 1px solid transparent;
+    border-left: 1px solid transparent;
+    transition: border-color 0.3s;
+  }
+
+  .cyber-premium-card:hover {
+    border-color: var(--stone-space);
+    transform: translateY(-4px);
+    box-shadow: 0 10px 30px rgba(0, 255, 255, 0.02);
+  }
+
+  .cyber-premium-card:hover::before {
+    border-top-color: var(--stone-space);
+    border-left-color: var(--stone-space);
+  }
+
+  /* Card Image Space with Matrix Border Layout */
+  .card-viewport-frame {
+    position: relative;
+    aspect-ratio: 1/1;
+    background-color: var(--bg-pure-dark);
+    overflow: hidden;
+    margin-bottom: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.02);
+  }
+
+  .card-viewport-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s, filter 0.4s;
+    filter: grayscale(20%);
+  }
+
+  .cyber-premium-card:hover .card-viewport-frame img {
+    transform: scale(1.03);
+    filter: grayscale(0%);
+  }
+
+  .card-state-overlay {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(5, 5, 8, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--stone-space);
+    border: 1px solid var(--stone-space);
+  }
+
+  .cyber-premium-card.active-playing .card-state-overlay {
+    opacity: 1;
+  }
+
+  .card-favorite-toggle {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 5;
+    background: rgba(5, 5, 8, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    transition: all 0.3s;
+    color: var(--text-muted);
+  }
+
+  .card-favorite-toggle.is-liked {
+    color: var(--stone-reality);
+    border-color: rgba(255, 0, 85, 0.3);
+    background: rgba(255, 0, 85, 0.08);
+    text-shadow: 0 0 8px var(--stone-reality);
+  }
+
+  .track-heading {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    color: var(--text-white);
+  }
+
+  .track-subtext {
+    font-size: 11px;
+    color: var(--text-silver);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
 
-  #nowPlaying .meta {
-    display: block;
-    font-size: 11px;
-    color: var(--text-dim);
+  /* Fixed Hardware Console Player Bar Layout */
+  .hardware-deck-console {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: var(--bg-pure-dark);
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+    padding: 25px 50px;
+    z-index: 100;
   }
 
-  .controls {
+  .deck-console-inner {
+    display: grid;
+    grid-template-columns: 320px 1fr 320px;
+    align-items: center;
+    gap: 40px;
+  }
+
+  .active-track-profile {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  .active-track-profile .profile-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--text-white);
+  }
+
+  .active-track-profile .profile-meta {
+    font-size: 11px;
+    color: var(--text-silver);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .center-playback-matrix {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .deck-action-buttons {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .deck-action-buttons button {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 13px;
+    cursor: pointer;
+    transition: color 0.3s, text-shadow 0.3s;
+    outline: none;
+  }
+
+  .deck-action-buttons button:hover {
+    color: var(--text-white);
+  }
+
+  .deck-action-buttons button.system-toggle-on {
+    color: var(--stone-space);
+    text-shadow: 0 0 12px var(--stone-space);
+  }
+
+  /* High-Performance Core Play Trigger Switch */
+  .deck-action-buttons button#centralPlayToggle {
+    background-color: var(--text-white);
+    color: var(--bg-pure-dark);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    font-size: 11px;
+    padding-left: 2px;
+    transition: transform 0.2s, background-color 0.2s;
   }
 
-  .controls button {
-    background: radial-gradient(circle at 30% 0, #20102e 0, #090915 80%);
-    border-radius: 10px;
-    border: 1px solid rgba(0, 229, 255, 0.5);
-    color: #e8ebff;
-    padding: 7px 11px;
-    font-size: 14px;
+  .deck-action-buttons button#centralPlayToggle:hover {
+    transform: scale(1.05);
+    background-color: var(--stone-space);
+  }
+
+  .scrub-timeline-strip {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+
+  .scrub-timeline-strip .timestamp-display {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 9px;
+    color: var(--text-silver);
+    letter-spacing: 1.5px;
+    min-width: 40px;
+  }
+
+  .deck-linear-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.08);
+    outline: none;
     cursor: pointer;
-    min-width: 34px;
+    position: relative;
   }
 
-  .controls button.active {
-    box-shadow: 0 0 14px rgba(255, 34, 87, 0.7);
-    border-color: #ff2257;
-    color: #fff;
+  .deck-linear-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 6px;
+    height: 6px;
+    background-color: var(--stone-space);
+    box-shadow: 0 0 10px var(--stone-space);
+    border-radius: 50%;
+    transition: transform 0.2s;
   }
 
-  .player-right {
+  .deck-linear-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.6);
+  }
+
+  .right-utility-matrix {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    gap: 10px;
+    gap: 30px;
   }
 
-  .group {
+  .utility-node-cluster {
     display: flex;
     align-items: center;
-    gap: 6px;
-    font-size: 11px;
-    color: var(--text-dim);
+    gap: 12px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 9px;
+    color: var(--text-silver);
+    letter-spacing: 2px;
   }
 
-  input.range {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 120px;
-    height: 6px;
-    border-radius: 6px;
-    background: rgba(0, 229, 255, 0.24);
-    cursor: pointer;
+  .utility-dropdown-select {
+    background-color: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--text-white);
+    padding: 5px 10px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 9px;
     outline: none;
-  }
-
-  #progress {
-    flex: 1;
-    max-width: 480px;
-  }
-
-  .progress-section {
-    grid-column: 1 / -1;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 4px;
-    justify-content: center;
-  }
-
-  .time {
-    font-size: 11px;
-    color: var(--text-dim);
-    min-width: 40px;
-    text-align: center;
-  }
-
-  .speed-select {
-    background: rgba(12, 12, 30, 0.9);
-    border-radius: 8px;
-    border: 1px solid rgba(0, 229, 255, 0.5);
-    color: #e8ebff;
-    padding: 4px 6px;
-    font-size: 11px;
-    outline: none;
-  }
-
-  .playlist-bar {
-    margin-top: 8px;
-    font-size: 11px;
-    color: var(--text-dim);
-  }
-
-  .playlist-bar span {
     cursor: pointer;
-    margin-right: 10px;
+    letter-spacing: 1px;
   }
 
-  .playlist-bar span.active {
-    color: #ffcccc;
-    text-decoration: underline;
+  .utility-dropdown-select option {
+    background-color: var(--bg-pure-dark);
+    color: var(--text-white);
   }
 
-  @media (max-width: 900px) {
-    .player-inner {
+  .volume-slider-scale {
+    width: 100px;
+  }
+
+  /* Hidden Processing Audio Pipeline Node */
+  #coreAudioEngine {
+    display: none;
+  }
+
+  @media (max-width: 1024px) {
+    .workspace-layout {
       grid-template-columns: 1fr;
+    }
+    aside {
+      display: none;
+    }
+    .deck-console-inner {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+    .right-utility-matrix {
+      display: none;
     }
   }
 </style>
 </head>
-
 <body>
 
-<header>
-  <div class="logo">🕷</div>
-  <h1>SpiderVerse Audio Deck</h1>
-  <span class="subtitle">YouTube‑powered futuristic audio player</span>
-</header>
-
-<div class="container">
-  <div class="top-bar">
-    <div class="search-wrapper">
-      <input id="searchInput" placeholder="Search a track and press Enter..." />
-      <button onclick="searchSongs()">Scan</button>
+<div class="app-container">
+  
+  <header>
+    <div class="brand-group">
+      <h1>V's AUDIO DECK</h1>
+      <div class="brand-badge">SYSTEM CORE</div>
     </div>
-    <div class="top-right">
-      <div class="top-tags">
-        <div class="chip" onclick="quickSearch('lofi hip hop playlist')">Lofi</div>
-        <div class="chip" onclick="quickSearch('marvel soundtrack')">Marvel</div>
-        <div class="chip" onclick="quickSearch('spider man soundtrack')">Spider‑Man</div>
-        <div class="chip" onclick="quickSearch('epic orchestral music')">Epic</div>
+    <div class="system-node-id">[ BROADCAST_NODE // STABLE ]</div>
+  </header>
+
+  <div class="workspace-layout">
+    
+    <aside>
+      <div>
+        <div class="nav-section-title">Navigation Matrix</div>
+        <ul class="nav-list">
+          <li id="menu-home" class="nav-link-item active" onclick="alterNavigationContext('home')">Nexus Array</li>
+          <li id="menu-search" class="nav-link-item" onclick="alterNavigationContext('search')">Query Stream</li>
+          <li id="menu-liked" class="nav-link-item" onclick="alterNavigationContext('liked')">Saved Matrix</li>
+        </ul>
       </div>
-      <div class="search-history" id="historyChips"></div>
-    </div>
+      <div>
+        <div class="nav-section-title">Stones Curations</div>
+        <ul class="nav-list">
+          <li class="nav-link-item" onclick="executeFastQuery('Power Cosmic Theme')">Power Stone</li>
+          <li class="nav-link-item" onclick="executeFastQuery('Reality Distortion Lofi')">Reality Stone</li>
+          <li class="nav-link-item" onclick="executeFastQuery('Space Ambient Mix')">Space Stone</li>
+        </ul>
+      </div>
+    </aside>
+
+    <main>
+      
+      <div class="cinema-hero-banner">
+        <div class="hero-content-cluster">
+          <div class="hero-mini-tag">Active Matrix Node Stream</div>
+          <div class="hero-main-title" id="featuredHeadline">Infinity War</div>
+          <div class="hero-synopsis" id="featuredSynopsis">Access direct sonic profiles through the localized digital audio wrapper pipeline framework. Multi-channel continuous background streaming initialized.</div>
+        </div>
+        <div class="hero-gradient-shroud"></div>
+      </div>
+
+      <div class="terminal-search-box">
+        <input type="text" id="terminalQueryInput" placeholder="SCAN VECTOR INSTANCE STRINGS..." />
+        <button onclick="executeTerminalSearch()">Scan</button>
+      </div>
+
+      <div class="history-capsule-row" id="historyArrayDisplay"></div>
+
+      <div>
+        <div class="section-headline-bar">
+          <div class="section-headline-title" id="primaryGridLabel">Recommended Soundtracks</div>
+          <div class="section-headline-bracket">[ DATA_STREAM_OPEN ]</div>
+        </div>
+        <div class="cyber-media-grid" style="margin-top: 30px;" id="matrixGridReceiver">
+          </div>
+      </div>
+
+    </main>
+
   </div>
 
-  <div class="playlist-bar">
-    <span id="tab-home" class="active" onclick="showHome()">Home</span>
-    <span id="tab-search" onclick="showSearch()">Search results</span>
-    <span id="tab-liked" onclick="showLiked()">Liked playlist</span>
-  </div>
-
-  <div id="sectionTitle" class="section-header">Recommended for you</div>
-  <div class="results" id="results"></div>
 </div>
 
-<div id="player"></div>
+<audio id="coreAudioEngine" crossorigin="anonymous" preload="auto"></audio>
 
-<div class="bottom-player">
-  <div class="player-inner">
-    <div id="nowPlaying">
-      <span class="title">No track loaded</span>
-      <span class="meta">Search or pick from recommendations</span>
+<div class="hardware-deck-console">
+  <div class="deck-console-inner">
+    
+    <div class="active-track-profile">
+      <div class="profile-title" id="consoleTitleText">No Active Node Unit</div>
+      <div class="profile-meta" id="consoleAuthorText">Scan instance vector strings</div>
     </div>
 
-    <div class="controls">
-      <button id="shuffleBtn" onclick="toggleShuffle()">🔀</button>
-      <button onclick="prevSong()">⏮</button>
-      <button id="playPauseBtn" onclick="togglePlay()">▶</button>
-      <button onclick="nextSong()">⏭</button>
-      <button id="repeatBtn" onclick="toggleRepeat()">🔁</button>
+    <div class="center-playback-matrix">
+      <div class="deck-action-buttons">
+        <button id="systemShuffle" onclick="toggleEngineShuffle()">🔀</button>
+        <button onclick="retreatEngineTrack()">⏮</button>
+        <button id="centralPlayToggle" onclick="toggleEnginePlayback()">▶</button>
+        <button onclick="advanceEngineTrack()">⏭</button>
+        <button id="systemRepeat" onclick="toggleEngineRepeat()">🔁</button>
+      </div>
+
+      <div class="scrub-timeline-strip">
+        <span class="timestamp-display" id="timeCurrent">0:00</span>
+        <input type="range" class="deck-linear-slider" id="consoleScrubber" min="0" max="100" value="0" oninput="dispatchConsoleScrub(this.value)">
+        <span class="timestamp-display" id="timeDuration">0:00</span>
+      </div>
     </div>
 
-    <div class="player-right">
-      <div class="group">
-        <span>Speed</span>
-        <select id="speedSelect" class="speed-select" onchange="changeSpeed()">
+    <div class="right-utility-matrix">
+      <div class="utility-node-cluster">
+        <span>RATE:</span>
+        <select class="utility-dropdown-select" id="engineSpeedMenu" onchange="adjustEngineSpeedValue(this.value)">
           <option value="0.75">0.75x</option>
-          <option value="1" selected>1x</option>
+          <option value="1.0" selected>1.0x</option>
           <option value="1.25">1.25x</option>
           <option value="1.5">1.5x</option>
-          <option value="2">2x</option>
+          <option value="2.0">2.0x</option>
         </select>
       </div>
-      <div class="group">
-        <span>🔊</span>
-        <input id="volume" type="range" class="range" min="0" max="100" value="70">
+      <div class="utility-node-cluster">
+        <span>GAIN:</span>
+        <input type="range" class="deck-linear-slider volume-slider-scale" id="engineVolumeBar" min="0" max="100" value="80" oninput="adjustEngineGainValue(this.value)">
       </div>
     </div>
 
-    <div class="progress-section">
-      <span id="currentTime" class="time">0:00</span>
-      <input id="progress" type="range" class="range" min="0" max="100" value="0">
-      <span id="duration" class="time">0:00</span>
-    </div>
   </div>
 </div>
 
 <script>
-  // ===========================
-  // PUT YOUR API KEY HERE
-  // ===========================
-  const API_KEY = 'AIzaSyC8urZivMZBPSBQ5M12LlWO7Njk1nc9b-0';
-  // ===========================
+  // =========================================================================
+  // MANDATORY SECURITY STORAGE / CONFIGURATION KEY
+  // INSERT YOUR DECENTRALIZED GOOGLE DEVELOPER CLOUD KEY MATRIX API HERE
+  // =========================================================================
+  const DATA_CLUSTER_KEY = 'AIzaSyC8urZivMZBPSBQ5M12LlWO7Njk1nc9b-0'; 
+  // =========================================================================
 
-  // YouTube player
-  let player;
-  let ytReady = false;
-  let playerReady = false;
+  // Systems Memory Context Registers
+  const audioEngine = document.getElementById('coreAudioEngine');
+  let currentPerspective = 'home'; 
+  let structuralHomeArray = [];
+  let structuralSearchArray = [];
+  let structuralLikedArray = fetchStoredMatrixArray();
+  let trackPointerIndex = -1;
+  let isShuffleActive = false;
+  let isRepeatActive = false;
 
-  // Data
-  let currentListType = 'home'; // 'home' | 'search' | 'liked'
-  let homeList = [];
-  let searchList = [];
-  let likedList = loadLikedFromStorage();
-  let currentIndex = -1;
-  let shuffle = false;
-  let repeat = false;
-
-  const tag = document.createElement("script");
-  tag.src = "https://www.youtube.com/iframe_api";
-  document.head.appendChild(tag);
-
-  function onYouTubeIframeAPIReady() {
-    ytReady = true;
-    initPlayer();
+  // Background Processing Execution Layer Binding Hook
+  if ('mediaSession' in navigator) {
+    navigator.mediaSession.setActionHandler('play', () => toggleEnginePlayback());
+    navigator.mediaSession.setActionHandler('pause', () => toggleEnginePlayback());
+    navigator.mediaSession.setActionHandler('previoustrack', () => retreatEngineTrack());
+    navigator.mediaSession.setActionHandler('nexttrack', () => advanceEngineTrack());
   }
 
-  function initPlayer() {
-    if (player) return;
-    player = new YT.Player("player", {
-      host: 'https://www.youtube-nocookie.com',
-      height: "1",
-      width: "1",
-      videoId: "",
-      playerVars: {
-        autoplay: 0,
-        controls: 0,
-        fs: 0,
-        rel: 0,
-        modestbranding: 1,
-        playsinline: 1
-      },
-      events: {
-        onReady: onPlayerReady,
-        onStateChange: onPlayerStateChange
+  // System Engine Boot Sequence
+  window.addEventListener('DOMContentLoaded', () => {
+    initializeHardwareEngineListeners();
+    executeCoreBootSequence();
+    renderSystemHistoryCapsules();
+  });
+
+  function initializeHardwareEngineListeners() {
+    audioEngine.addEventListener('timeupdate', () => {
+      if (!audioEngine.duration) return;
+      const progressPercent = (audioEngine.currentTime / audioEngine.duration) * 100;
+      document.getElementById('consoleScrubber').value = progressPercent;
+      document.getElementById('timeCurrent').textContent = convertSecondsToReadable(audioEngine.currentTime);
+    });
+
+    audioEngine.addEventListener('loadedmetadata', () => {
+      document.getElementById('timeDuration').textContent = convertSecondsToReadable(audioEngine.duration);
+    });
+
+    audioEngine.addEventListener('ended', () => {
+      if (isRepeatActive) {
+        audioEngine.currentTime = 0;
+        audioEngine.play();
+      } else {
+        advanceEngineTrack();
       }
     });
   }
 
-  function onPlayerReady(e) {
-    playerReady = true;
-    const vol = parseInt(document.getElementById("volume").value, 10) || 70;
-    e.target.setVolume(vol);
-    setupProgressTimer();
-    loadHomeRecommendations(); // auto-fill home section
-    renderHistoryChips();
-  }
-
-  function onPlayerStateChange(e) {
-    updatePlayPauseButton();
-    if (e.data === YT.PlayerState.ENDED) {
-      if (repeat) {
-        player.seekTo(0, true);
-        player.playVideo();
-      } else {
-        nextSong();
+  async function executeCoreBootSequence() {
+    const curatedDefaultQuery = 'marvel cinematic universe soundtrack  theme';
+    const requestEndpoint = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=20&type=video&videoCategoryId=10&q=${encodeURIComponent(curatedDefaultQuery)}&key=${DATA_CLUSTER_KEY}`;
+    
+    try {
+      const response = await fetch(requestEndpoint);
+      const data = await response.json();
+      if (data.items) {
+        structuralHomeArray = data.items;
+        if (currentPerspective === 'home') {
+          populateInterfaceGrid(structuralHomeArray);
+        }
       }
+    } catch (exc) {
+      console.warn("Context Registry Allocation Exception during core data fetch sequence.", exc);
     }
   }
 
-  function getActiveList() {
-    if (currentListType === 'search') return searchList;
-    if (currentListType === 'liked') return likedList;
-    return homeList;
-  }
+  async function executeTerminalSearch() {
+    const inputElement = document.getElementById('terminalQueryInput');
+    const query = inputElement.value.trim();
+    if (!query) return;
 
-  function quickSearch(text) {
-    document.getElementById("searchInput").value = text;
-    searchSongs();
-  }
+    commitSearchStringToHistory(query);
 
-  async function loadHomeRecommendations() {
-    // simple curated query to feel like "home" mixes
-    const q = 'lofi hip hop mix chill beats soundtrack';
-    const url =
-      'https://www.googleapis.com/youtube/v3/search' +
-      '?part=snippet' +
-      '&maxResults=24' +
-      '&type=video' +
-      '&videoCategoryId=10' +
-      '&q=' + encodeURIComponent(q) +
-      '&key=' + API_KEY;
+    const requestEndpoint = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=24&type=video&videoCategoryId=10&q=${encodeURIComponent(query + " soundtrack audio")}&key=${DATA_CLUSTER_KEY}`;
+    
     try {
-      const res = await fetch(url);
-      const data = await res.json();
+      const response = await fetch(requestEndpoint);
+      const data = await response.json();
       if (data.error) {
-        console.error('Home API error', data.error);
+        alert(`API Core Error Flagged: ${data.error.message}`);
         return;
       }
-      homeList = data.items || [];
-      if (currentListType === 'home') {
-        renderList(homeList);
-        document.getElementById('sectionTitle').textContent = 'Recommended for you';
-      }
+      structuralSearchArray = data.items || [];
+      currentPerspective = 'search';
+      synchronizeSidebarTabs('search');
+      populateInterfaceGrid(structuralSearchArray);
+      document.getElementById('primaryGridLabel').textContent = `Query Stream: "${query}"`;
     } catch (err) {
       console.error(err);
     }
   }
 
-  async function searchSongs() {
-    const q = document.getElementById("searchInput").value.trim();
-    if (!q) return;
-
-    saveSearchHistory(q);
-
-    const url =
-      'https://www.googleapis.com/youtube/v3/search' +
-      '?part=snippet' +
-      '&maxResults=24' +
-      '&type=video' +
-      '&videoCategoryId=10' + // music category [web:48]
-      '&q=' + encodeURIComponent(q + " official audio") + // bias toward audio-style results
-      '&key=' + API_KEY; // [web:47]
-
-    try {
-      const res = await fetch(url);
-      const data = await res.json();
-      if (data.error) {
-        alert("YouTube API error: " + (data.error.message || "Check key & quota"));
-        console.error(data.error);
-        return;
-      }
-      searchList = data.items || [];
-      currentListType = 'search';
-      setTabActive('search');
-      renderList(searchList);
-      document.getElementById('sectionTitle').textContent = `Results for "${q}"`;
-    } catch (err) {
-      console.error(err);
-      alert("Network error while calling YouTube.");
-    }
+  function executeFastQuery(term) {
+    document.getElementById('terminalQueryInput').value = term;
+    executeTerminalSearch();
   }
 
-  function renderList(list) {
-    const container = document.getElementById("results");
-    container.innerHTML = "";
-    list.forEach((item, index) => {
-      const title = item.snippet?.title || "Unknown track";
-      const channel = item.snippet?.channelTitle || "Unknown channel";
-      const thumb = item.snippet?.thumbnails?.medium?.url ||
-                    item.snippet?.thumbnails?.default?.url || "";
-      const videoId = item.id?.videoId || item.id;
+  function populateInterfaceGrid(dataset) {
+    const gridTarget = document.getElementById('matrixGridReceiver');
+    gridTarget.innerHTML = '';
 
-      const card = document.createElement("div");
-      card.className = "card";
-      card.dataset.index = index;
-      card.innerHTML = `
-        <div class="playing-pill">● Playing</div>
-        <span class="like-btn ${isLiked(videoId) ? "liked" : ""}" onclick="toggleLikeFromCard(event,'${videoId}')">♥</span>
-        <img src="${thumb}" alt="${title}">
-        <p>${title}</p>
-        <small>${channel}</small>
+    dataset.forEach((dataNode, index) => {
+      const compositeId = dataNode.id?.videoId || dataNode.id;
+      const title = dataNode.snippet?.title || "Unknown Track Node";
+      const author = dataNode.snippet?.channelTitle || "Unknown Matrix Node";
+      const thumbnail = dataNode.snippet?.thumbnails?.medium?.url || "";
+
+      const cardElement = document.createElement('div');
+      cardElement.className = `cyber-premium-card ${index === trackPointerIndex ? 'active-playing' : ''}`;
+      cardElement.innerHTML = `
+        <div class="card-favorite-toggle ${verifyLikeStatus(compositeId) ? 'is-liked' : ''}" onclick="mutateMatrixSaveStatus(event, '${compositeId}', ${index})">♥</div>
+        <div class="card-viewport-frame">
+          <img src="${thumbnail}" alt="Art Block">
+          <div class="card-state-overlay">[ RUNNING ]</div>
+        </div>
+        <div class="track-heading">${title}</div>
+        <div class="track-subtext">${author}</div>
       `;
-      card.addEventListener('click', () => playSong(index));
-      container.appendChild(card);
-    });
-    updatePlayingIndicator();
-  }
-
-  function updatePlayingIndicator() {
-    const cards = document.querySelectorAll(".card");
-    const list = getActiveList();
-    cards.forEach((card, i) => {
-      if (i === currentIndex && list[currentIndex]) {
-        card.classList.add("playing");
-      } else {
-        card.classList.remove("playing");
-      }
+      cardElement.addEventListener('click', () => dispatchAudioLoadPipeline(index));
+      gridTarget.appendChild(cardElement);
     });
   }
 
-  function playSong(index) {
-    const list = getActiveList();
-    if (!list.length || !ytReady || !playerReady) return;
-
-    currentIndex = index;
-    const item = list[currentIndex];
-    const videoId = item.id?.videoId || item.id;
-    const title = item.snippet?.title || "Unknown track";
-    const channel = item.snippet?.channelTitle || "Unknown channel";
-
-    document.getElementById("nowPlaying").innerHTML = `
-      <span class="title">${title}</span>
-      <span class="meta">${channel}</span>
-    `;
-
-    updatePlayingIndicator();
-
-    // Avoid lag / wrong‑song: always call loadVideoById BEFORE playVideo, never double‑load
-    player.stopVideo();
-    player.loadVideoById(videoId);
-    player.playVideo();
-    updatePlayPauseButton();
+  function fetchActiveDataArray() {
+    if (currentPerspective === 'search') return structuralSearchArray;
+    if (currentPerspective === 'liked') return structuralLikedArray;
+    return structuralHomeArray;
   }
 
-  function togglePlay() {
-    if (!playerReady || currentIndex === -1) return;
-    const state = player.getPlayerState();
-    if (state === YT.PlayerState.PLAYING) player.pauseVideo();
-    else player.playVideo();
-    updatePlayPauseButton();
+  // =========================================================================
+  // CONTINUOUS BACKGROUND TRANSFORMATION STREAM DECK ENGINE
+  // =========================================================================
+  function dispatchAudioLoadPipeline(index) {
+    const activeList = fetchActiveDataArray();
+    if (!activeList || !activeList[index]) return;
+
+    trackPointerIndex = index;
+    const arrayItem = activeList[trackPointerIndex];
+    const trackingId = arrayItem.id?.videoId || arrayItem.id;
+    const title = arrayItem.snippet?.title || "Unknown Track Segment";
+    const author = arrayItem.snippet?.channelTitle || "Unknown Matrix Source";
+
+    document.getElementById('consoleTitleText').textContent = title;
+    document.getElementById('consoleAuthorText').textContent = author;
+    
+    document.getElementById('featuredHeadline').textContent = title;
+    document.getElementById('featuredSynopsis').textContent = `Now extracting audio node data package array from network host. Processing background sync metrics. Instance hash value: [${trackingId}].`;
+
+    audioEngine.pause();
+    
+    // Fallback streaming loop structure required to maintain active thread priority in minimized screens
+    audioEngine.src = `https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3?instance=${trackingId}`;
+    
+    audioEngine.load();
+    
+    var playPromise = audioEngine.play();
+    if (playPromise !== undefined) {
+      playPromise.then(_ => {
+        if ('mediaSession' in navigator) {
+          navigator.mediaSession.metadata = new MediaMetadata({
+            title: title,
+            artist: author,
+            album: 'Infinity System Core v2',
+            artwork: [{ src: arrayItem.snippet?.thumbnails?.medium?.url || '', sizes: '258x258', type: 'image/jpeg' }]
+          });
+        }
+      }).catch(err => {
+        console.log("Audio thread resolution deferred pending browser scope validation interaction.");
+      });
+    }
+
+    const cards = document.querySelectorAll('.cyber-premium-card');
+    cards.forEach((c, idx) => {
+      c.classList.toggle('active-playing', idx === trackPointerIndex);
+    });
+    
+    document.getElementById('centralPlayToggle').textContent = "⏸";
   }
 
-  function updatePlayPauseButton() {
-    const btn = document.getElementById("playPauseBtn");
-    if (!playerReady) {
-      btn.textContent = "▶";
+  function toggleEnginePlayback() {
+    if (trackPointerIndex === -1) {
+      if (fetchActiveDataArray().length > 0) dispatchAudioLoadPipeline(0);
       return;
     }
-    const st = player.getPlayerState();
-    btn.textContent = (st === YT.PlayerState.PLAYING) ? "⏸" : "▶";
-  }
-
-  function nextSong() {
-    const list = getActiveList();
-    if (!list.length) return;
-    let nextIndex;
-    if (shuffle) {
-      nextIndex = Math.floor(Math.random() * list.length);
+    
+    if (audioEngine.paused) {
+      audioEngine.play();
+      document.getElementById('centralPlayToggle').textContent = "⏸";
     } else {
-      nextIndex = currentIndex + 1;
-      if (nextIndex >= list.length) {
-        if (repeat) nextIndex = 0;
-        else return;
-      }
+      audioEngine.pause();
+      document.getElementById('centralPlayToggle').textContent = "▶";
     }
-    playSong(nextIndex);
   }
 
-  function prevSong() {
-    const list = getActiveList();
+  function advanceEngineTrack() {
+    const list = fetchActiveDataArray();
     if (!list.length) return;
-    if (playerReady && player.getCurrentTime() > 3) {
-      player.seekTo(0, true);
+
+    let targetIndex = trackPointerIndex + 1;
+    if (isShuffleActive) {
+      targetIndex = Math.floor(Math.random() * list.length);
+    } else if (targetIndex >= list.length) {
+      targetIndex = 0;
+    }
+    dispatchAudioLoadPipeline(targetIndex);
+  }
+
+  function retreatEngineTrack() {
+    const list = fetchActiveDataArray();
+    if (!list.length) return;
+
+    if (audioEngine.currentTime > 4) {
+      audioEngine.currentTime = 0;
       return;
     }
-    let prevIndex = currentIndex - 1;
-    if (prevIndex < 0) {
-      if (repeat) prevIndex = list.length - 1;
-      else return;
+
+    let targetIndex = trackPointerIndex - 1;
+    if (targetIndex < 0) {
+      targetIndex = list.length - 1;
     }
-    playSong(prevIndex);
+    dispatchAudioLoadPipeline(targetIndex);
   }
 
-  function toggleShuffle() {
-    shuffle = !shuffle;
-    document.getElementById("shuffleBtn").classList.toggle("active", shuffle);
+  function dispatchConsoleScrub(val) {
+    if (!audioEngine.duration) return;
+    audioEngine.currentTime = (val / 100) * audioEngine.duration;
   }
 
-  function toggleRepeat() {
-    repeat = !repeat;
-    document.getElementById("repeatBtn").classList.toggle("active", repeat);
+  function adjustEngineGainValue(val) {
+    audioEngine.volume = val / 100;
   }
 
-  function changeSpeed() {
-    if (!playerReady) return;
-    const rate = parseFloat(document.getElementById("speedSelect").value);
-    player.setPlaybackRate(rate);
+  function adjustEngineSpeedValue(val) {
+    audioEngine.playbackRate = parseFloat(val);
   }
 
-  document.getElementById("volume").addEventListener("input", e => {
-    if (!playerReady) return;
-    const v = parseInt(e.target.value, 10) || 0;
-    player.setVolume(v);
-  });
-
-  document.getElementById("progress").addEventListener("input", e => {
-    if (!playerReady) return;
-    const percent = parseFloat(e.target.value);
-    const duration = player.getDuration();
-    if (!duration || duration <= 0) return;
-    const seek = (percent / 100) * duration;
-    player.seekTo(seek, true);
-  });
-
-  function setupProgressTimer() {
-    if (window.__progressInterval) clearInterval(window.__progressInterval);
-    window.__progressInterval = setInterval(() => {
-      if (!playerReady || !player.getDuration) return;
-      const duration = player.getDuration();
-      if (!duration || duration <= 0) return;
-      const currentTime = player.getCurrentTime();
-      const percent = (currentTime / duration) * 100;
-      document.getElementById("currentTime").textContent = formatTime(currentTime);
-      document.getElementById("duration").textContent = formatTime(duration);
-      document.getElementById("progress").value = percent;
-    }, 500);
+  function toggleEngineShuffle() {
+    isShuffleActive = !isShuffleActive;
+    document.getElementById('systemShuffle').classList.toggle('system-toggle-on', isShuffleActive);
   }
 
-  function formatTime(sec) {
-    if (!sec || isNaN(sec)) return "0:00";
-    const m = Math.floor(sec / 60);
-    const s = Math.floor(sec % 60);
-    return m + ":" + String(s).padStart(2, "0");
+  function toggleEngineRepeat() {
+    isRepeatActive = !isRepeatActive;
+    document.getElementById('systemRepeat').classList.toggle('system-toggle-on', isRepeatActive);
   }
 
-  document.getElementById("searchInput").addEventListener("keydown", e => {
-    if (e.key === "Enter") searchSongs();
-  });
-
-  document.addEventListener("keydown", e => {
-    const tag = e.target.tagName.toLowerCase();
-    if (tag === "input" || tag === "textarea" || tag === "select") return;
+  // System Hardware Keyboard Mapping
+  document.addEventListener('keydown', e => {
+    if (document.activeElement.tagName === 'INPUT') return;
     if (e.code === "Space") {
       e.preventDefault();
-      togglePlay();
-    } else if (e.code === "ArrowRight") {
-      if (playerReady) player.seekTo(player.getCurrentTime() + 5, true);
-    } else if (e.code === "ArrowLeft") {
-      if (playerReady) player.seekTo(Math.max(0, player.getCurrentTime() - 5), true);
+      toggleEnginePlayback();
     }
   });
 
-  // Search history using localStorage [web:53][web:56]
-  function loadHistory() {
+  function convertSecondsToReadable(seconds) {
+    if (isNaN(seconds) || seconds === null) return "0:00";
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  }
+
+  // Persisted Storage Array Methods
+  function fetchStoredMatrixArray() {
     try {
-      const raw = localStorage.getItem('sv_history');
-      if (!raw) return [];
-      return JSON.parse(raw) || [];
-    } catch {
-      return [];
-    }
+      const data = localStorage.getItem('inf_matrix_liked_v2');
+      return data ? JSON.parse(data) : [];
+    } catch { return []; }
   }
 
-  function saveSearchHistory(q) {
-    let history = loadHistory();
-    history = history.filter(item => item.toLowerCase() !== q.toLowerCase());
-    history.unshift(q);
-    if (history.length > 6) history = history.slice(0, 6);
-    localStorage.setItem('sv_history', JSON.stringify(history));
-    renderHistoryChips();
+  function commitLikedMatrixToStorage() {
+    localStorage.setItem('inf_matrix_liked_v2', JSON.stringify(structuralLikedArray));
   }
 
-  function renderHistoryChips() {
-    const history = loadHistory();
-    const container = document.getElementById('historyChips');
-    container.innerHTML = '';
-    history.forEach(term => {
-      const chip = document.createElement('div');
-      chip.className = 'chip';
-      chip.textContent = term;
-      chip.onclick = () => {
-        document.getElementById("searchInput").value = term;
-        searchSongs();
-      };
-      container.appendChild(chip);
-    });
+  function verifyLikeStatus(compositeId) {
+    return structuralLikedArray.some(node => (node.id?.videoId || node.id) === compositeId);
   }
 
-  // Liked playlist (simple local playlist)
-  function loadLikedFromStorage() {
-    try {
-      const raw = localStorage.getItem('sv_liked');
-      if (!raw) return [];
-      return JSON.parse(raw) || [];
-    } catch {
-      return [];
-    }
-  }
-
-  function saveLikedToStorage() {
-    localStorage.setItem('sv_liked', JSON.stringify(likedList));
-  }
-
-  function isLiked(videoId) {
-    return likedList.some(item => (item.id?.videoId || item.id) === videoId);
-  }
-
-  function toggleLikeFromCard(event, videoId) {
+  function mutateMatrixSaveStatus(event, compositeId, localIndex) {
     event.stopPropagation();
-    const list = getActiveList();
-    const item = list.find(x => (x.id?.videoId || x.id) === videoId);
-    if (!item) return;
+    const currentList = fetchActiveDataArray();
+    const targetNode = currentList.find(n => (n.id?.videoId || n.id) === compositeId);
+    if (!targetNode) return;
 
-    if (isLiked(videoId)) {
-      likedList = likedList.filter(x => (x.id?.videoId || x.id) !== videoId);
+    if (verifyLikeStatus(compositeId)) {
+      structuralLikedArray = structuralLikedArray.filter(n => (n.id?.videoId || n.id) !== compositeId);
     } else {
-      likedList.push(item);
+      structuralLikedArray.push(targetNode);
     }
-    saveLikedToStorage();
-    renderList(getActiveList());
+    
+    commitLikedMatrixToStorage();
+    populateInterfaceGrid(fetchActiveDataArray());
   }
 
-  function showHome() {
-    currentListType = 'home';
-    setTabActive('home');
-    renderList(homeList);
-    document.getElementById('sectionTitle').textContent = 'Recommended for you';
+  function commitSearchStringToHistory(query) {
+    try {
+      let history = JSON.parse(localStorage.getItem('inf_matrix_history_v2')) || [];
+      history = history.filter(item => item.toLowerCase() !== query.toLowerCase());
+      history.unshift(query);
+      if (history.length > 8) history.pop();
+      localStorage.setItem('inf_matrix_history_v2', JSON.stringify(history));
+      renderSystemHistoryCapsules();
+    } catch {}
   }
 
-  function showSearch() {
-    currentListType = 'search';
-    setTabActive('search');
-    renderList(searchList);
-    document.getElementById('sectionTitle').textContent = 'Search results';
+  function renderSystemHistoryCapsules() {
+    const container = document.getElementById('historyArrayDisplay');
+    container.innerHTML = '';
+    try {
+      const history = JSON.parse(localStorage.getItem('inf_matrix_history_v2')) || [];
+      history.forEach(term => {
+        const capsule = document.createElement('div');
+        capsule.className = 'history-capsule';
+        capsule.textContent = term;
+        capsule.onclick = () => {
+          document.getElementById('terminalQueryInput').value = term;
+          executeTerminalSearch();
+        };
+        container.appendChild(capsule);
+      });
+    } catch {}
   }
 
-  function showLiked() {
-    currentListType = 'liked';
-    setTabActive('liked');
-    renderList(likedList);
-    document.getElementById('sectionTitle').textContent = 'Liked playlist';
+  function alterNavigationContext(type) {
+    currentPerspective = type;
+    synchronizeSidebarTabs(type);
+    trackPointerIndex = -1;
+
+    if (type === 'home') {
+      populateInterfaceGrid(structuralHomeArray);
+      document.getElementById('primaryGridLabel').textContent = "Recommended Soundtracks";
+    } else if (type === 'search') {
+      populateInterfaceGrid(structuralSearchArray);
+      document.getElementById('primaryGridLabel').textContent = "Query Stream Matrix";
+    } else if (type === 'liked') {
+      populateInterfaceGrid(structuralLikedArray);
+      document.getElementById('primaryGridLabel').textContent = "Saved Matrix Playlist";
+    }
   }
 
-  function setTabActive(tab) {
-    ['home','search','liked'].forEach(id => {
-      const el = document.getElementById('tab-' + id);
-      if (!el) return;
-      el.classList.toggle('active', id === tab);
+  function synchronizeSidebarTabs(targetId) {
+    ['home', 'search', 'liked'].forEach(id => {
+      const el = document.getElementById('menu-' + id);
+      if (el) el.classList.toggle('active', id === targetId);
     });
-    currentIndex = -1;
-    updatePlayingIndicator();
   }
 </script>
 
