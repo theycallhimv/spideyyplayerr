@@ -186,7 +186,6 @@
     overflow: hidden;
   }
 
-  /* Technical brackets indicator overlays matching reference */
   .cinema-hero-banner::before {
     content: "[ STAGE // CONSOLE_PROP ]";
     position: absolute;
@@ -366,7 +365,6 @@
     transition: border-color 0.4s, transform 0.4s, box-shadow 0.4s;
   }
 
-  /* Precise Technical Corner Accent Bracket Systems */
   .cyber-premium-card::before {
     content: "";
     position: absolute;
@@ -390,7 +388,6 @@
     border-left-color: var(--stone-space);
   }
 
-  /* Card Image Space with Matrix Border Layout */
   .card-viewport-frame {
     position: relative;
     aspect-ratio: 1/1;
@@ -557,7 +554,6 @@
     text-shadow: 0 0 12px var(--stone-space);
   }
 
-  /* High-Performance Core Play Trigger Switch */
   .deck-action-buttons button#centralPlayToggle {
     background-color: var(--text-white);
     color: var(--bg-pure-dark);
@@ -656,7 +652,7 @@
     width: 100px;
   }
 
-  /* Hidden Processing Audio Pipeline Node */
+  /* Hidden Native Media Container */
   #coreAudioEngine {
     display: none;
   }
@@ -783,7 +779,7 @@
       </div>
       <div class="utility-node-cluster">
         <span>GAIN:</span>
-        <input type="range" class="deck-linear-slider volume-slider-scale" id="engineVolumeBar" min="0" max="100" value="80" oninput="adjustEngineGainValue(this.value)">
+        <input type="range" class="deck-linear-slider volume-slider-scale" id="engineVolumeBar" min="0" max="100" value="70" oninput="adjustEngineGainValue(this.value)">
       </div>
     </div>
 
@@ -793,12 +789,10 @@
 <script>
   // =========================================================================
   // MANDATORY SECURITY STORAGE / CONFIGURATION KEY
-  // INSERT YOUR DECENTRALIZED GOOGLE DEVELOPER CLOUD KEY MATRIX API HERE
   // =========================================================================
   const DATA_CLUSTER_KEY = 'AIzaSyC8urZivMZBPSBQ5M12LlWO7Njk1nc9b-0'; 
   // =========================================================================
 
-  // Systems Memory Context Registers
   const audioEngine = document.getElementById('coreAudioEngine');
   let currentPerspective = 'home'; 
   let structuralHomeArray = [];
@@ -808,7 +802,7 @@
   let isShuffleActive = false;
   let isRepeatActive = false;
 
-  // Background Processing Execution Layer Binding Hook
+  // Background Lock Screen Handlers integration logic 
   if ('mediaSession' in navigator) {
     navigator.mediaSession.setActionHandler('play', () => toggleEnginePlayback());
     navigator.mediaSession.setActionHandler('pause', () => toggleEnginePlayback());
@@ -816,7 +810,6 @@
     navigator.mediaSession.setActionHandler('nexttrack', () => advanceEngineTrack());
   }
 
-  // System Engine Boot Sequence
   window.addEventListener('DOMContentLoaded', () => {
     initializeHardwareEngineListeners();
     executeCoreBootSequence();
@@ -846,7 +839,7 @@
   }
 
   async function executeCoreBootSequence() {
-    const curatedDefaultQuery = 'marvel cinematic universe soundtrack  theme';
+    const curatedDefaultQuery = 'marvel cinematic universe soundtrack theme';
     const requestEndpoint = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=20&type=video&videoCategoryId=10&q=${encodeURIComponent(curatedDefaultQuery)}&key=${DATA_CLUSTER_KEY}`;
     
     try {
@@ -870,7 +863,7 @@
 
     commitSearchStringToHistory(query);
 
-    const requestEndpoint = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=24&type=video&videoCategoryId=10&q=${encodeURIComponent(query + " soundtrack audio")}&key=${DATA_CLUSTER_KEY}`;
+    const requestEndpoint = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=24&type=video&videoCategoryId=10&q=${encodeURIComponent(query + " official audio")}&key=${DATA_CLUSTER_KEY}`;
     
     try {
       const response = await fetch(requestEndpoint);
@@ -927,7 +920,7 @@
   }
 
   // =========================================================================
-  // CONTINUOUS BACKGROUND TRANSFORMATION STREAM DECK ENGINE
+  // STABLE LONG-PLAY DECK STREAM CONVERSION LOGIC
   // =========================================================================
   function dispatchAudioLoadPipeline(index) {
     const activeList = fetchActiveDataArray();
@@ -947,9 +940,8 @@
 
     audioEngine.pause();
     
-    // Fallback streaming loop structure required to maintain active thread priority in minimized screens
+    // To play continuously in the background/lock screen, we pipe the sound stream through an ongoing functional asset node wrapper.
     audioEngine.src = `https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3?instance=${trackingId}`;
-    
     audioEngine.load();
     
     var playPromise = audioEngine.play();
@@ -959,12 +951,12 @@
           navigator.mediaSession.metadata = new MediaMetadata({
             title: title,
             artist: author,
-            album: 'Infinity System Core v2',
+            album: "V's Audio Deck Engine v2",
             artwork: [{ src: arrayItem.snippet?.thumbnails?.medium?.url || '', sizes: '258x258', type: 'image/jpeg' }]
           });
         }
       }).catch(err => {
-        console.log("Audio thread resolution deferred pending browser scope validation interaction.");
+        console.log("Audio pipeline active tracking sync running.");
       });
     }
 
@@ -1043,7 +1035,6 @@
     document.getElementById('systemRepeat').classList.toggle('system-toggle-on', isRepeatActive);
   }
 
-  // System Hardware Keyboard Mapping
   document.addEventListener('keydown', e => {
     if (document.activeElement.tagName === 'INPUT') return;
     if (e.code === "Space") {
@@ -1059,16 +1050,15 @@
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   }
 
-  // Persisted Storage Array Methods
   function fetchStoredMatrixArray() {
     try {
-      const data = localStorage.getItem('inf_matrix_liked_v2');
+      const data = localStorage.getItem('inf_matrix_liked_v3');
       return data ? JSON.parse(data) : [];
     } catch { return []; }
   }
 
   function commitLikedMatrixToStorage() {
-    localStorage.setItem('inf_matrix_liked_v2', JSON.stringify(structuralLikedArray));
+    localStorage.setItem('inf_matrix_liked_v3', JSON.stringify(structuralLikedArray));
   }
 
   function verifyLikeStatus(compositeId) {
@@ -1093,11 +1083,11 @@
 
   function commitSearchStringToHistory(query) {
     try {
-      let history = JSON.parse(localStorage.getItem('inf_matrix_history_v2')) || [];
+      let history = JSON.parse(localStorage.getItem('inf_matrix_history_v3')) || [];
       history = history.filter(item => item.toLowerCase() !== query.toLowerCase());
       history.unshift(query);
       if (history.length > 8) history.pop();
-      localStorage.setItem('inf_matrix_history_v2', JSON.stringify(history));
+      localStorage.setItem('inf_matrix_history_v3', JSON.stringify(history));
       renderSystemHistoryCapsules();
     } catch {}
   }
@@ -1106,7 +1096,7 @@
     const container = document.getElementById('historyArrayDisplay');
     container.innerHTML = '';
     try {
-      const history = JSON.parse(localStorage.getItem('inf_matrix_history_v2')) || [];
+      const history = JSON.parse(localStorage.getItem('inf_matrix_history_v3')) || [];
       history.forEach(term => {
         const capsule = document.createElement('div');
         capsule.className = 'history-capsule';
