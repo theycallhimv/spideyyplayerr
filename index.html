@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>V's AUDIO DECK</title>
+<title>SpiderVerse Audio Deck</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
@@ -249,9 +249,14 @@
     color: #ff66a5;
   }
 
-  /* Core HTML5 Background Audio Engine Target Container */
-  #bgAudioEngine {
-    display: none;
+  #player {
+    position: fixed;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+    left: -9999px;
+    top: -9999px;
   }
 
   .bottom-player {
@@ -401,7 +406,7 @@
 
 <header>
   <div class="logo">🕷</div>
-  <h1>V's AUDIO DECK</h1>
+  <h1>SpiderVerse Audio Deck</h1>
   <span class="subtitle">YouTube‑powered futuristic audio player</span>
 </header>
 
@@ -432,7 +437,7 @@
   <div class="results" id="results"></div>
 </div>
 
-<audio id="bgAudioEngine" crossorigin="anonymous" preload="auto"></audio>
+<div id="player"></div>
 
 <div class="bottom-player">
   <div class="player-inner">
@@ -481,9 +486,10 @@
   const API_KEY = 'AIzaSyC8urZivMZBPSBQ5M12LlWO7Njk1nc9b-0';
   // ===========================
 
-  // Core Native Audio Instances Mapping
-  const audioEngine = document.getElementById('bgAudioEngine');
-  let playerReady = true;
+  // YouTube player
+  let player;
+  let ytReady = false;
+  let playerReady = false;
 
   // Data
   let currentListType = 'home'; // 'home' | 'search' | 'liked'
@@ -494,41 +500,56 @@
   let shuffle = false;
   let repeat = false;
 
-  // Initialize System Component Listeners on Launch Frame Hook
-  window.addEventListener('DOMContentLoaded', () => {
-    setupHardwareEngineListeners();
-    loadHomeRecommendations(); 
+  const tag = document.createElement("script");
+  tag.src = "https://www.youtube.com/iframe_api";
+  document.head.appendChild(tag);
+
+  function onYouTubeIframeAPIReady() {
+    ytReady = true;
+    initPlayer();
+  }
+
+  function initPlayer() {
+    if (player) return;
+    player = new YT.Player("player", {
+      host: 'https://www.youtube-nocookie.com',
+      height: "1",
+      width: "1",
+      videoId: "",
+      playerVars: {
+        autoplay: 0,
+        controls: 0,
+        fs: 0,
+        rel: 0,
+        modestbranding: 1,
+        playsinline: 1
+      },
+      events: {
+        onReady: onPlayerReady,
+        onStateChange: onPlayerStateChange
+      }
+    });
+  }
+
+  function onPlayerReady(e) {
+    playerReady = true;
+    const vol = parseInt(document.getElementById("volume").value, 10) || 70;
+    e.target.setVolume(vol);
+    setupProgressTimer();
+    loadHomeRecommendations(); // auto-fill home section
     renderHistoryChips();
-    
-    // Bind System Native Media Framework Controls
-    if ('mediaSession' in navigator) {
-      navigator.mediaSession.setActionHandler('play', () => togglePlay());
-      navigator.mediaSession.setActionHandler('pause', () => togglePlay());
-      navigator.mediaSession.setActionHandler('previoustrack', () => prevSong());
-      navigator.mediaSession.setActionHandler('nexttrack', () => nextSong());
-    }
-  });
+  }
 
-  function setupHardwareEngineListeners() {
-    audioEngine.addEventListener('timeupdate', () => {
-      if (!audioEngine.duration) return;
-      const percent = (audioEngine.currentTime / audioEngine.duration) * 100;
-      document.getElementById("currentTime").textContent = formatTime(audioEngine.currentTime);
-      document.getElementById("progress").value = percent;
-    });
-
-    audioEngine.addEventListener('loadedmetadata', () => {
-      document.getElementById("duration").textContent = formatTime(audioEngine.duration);
-    });
-
-    audioEngine.addEventListener('ended', () => {
+  function onPlayerStateChange(e) {
+    updatePlayPauseButton();
+    if (e.data === YT.PlayerState.ENDED) {
       if (repeat) {
-        audioEngine.currentTime = 0;
-        audioEngine.play();
+        player.seekTo(0, true);
+        player.playVideo();
       } else {
         nextSong();
       }
-    });
+    }
   }
 
   function getActiveList() {
@@ -543,6 +564,7 @@
   }
 
   async function loadHomeRecommendations() {
+    // simple curated query to feel like "home" mixes
     const q = 'lofi hip hop mix chill beats soundtrack';
     const url =
       'https://www.googleapis.com/youtube/v3/search' +
@@ -580,9 +602,9 @@
       '?part=snippet' +
       '&maxResults=24' +
       '&type=video' +
-      '&videoCategoryId=10' + 
-      '&q=' + encodeURIComponent(q + " official audio") + 
-      '&key=' + API_KEY;
+      '&videoCategoryId=10' + // music category [web:48]
+      '&q=' + encodeURIComponent(q + " official audio") + // bias toward audio-style results
+      '&key=' + API_KEY; // [web:47]
 
     try {
       const res = await fetch(url);
@@ -643,7 +665,7 @@
 
   function playSong(index) {
     const list = getActiveList();
-    if (!list.length) return;
+    if (!list.length || !ytReady || !playerReady) return;
 
     currentIndex = index;
     const item = list[currentIndex];
@@ -658,46 +680,29 @@
 
     updatePlayingIndicator();
 
-    audioEngine.pause();
-    
-    // Core structural transformation asset channel configuration routing loop
-    // Maps standard pointer states safely inside background sandbox runtimes
-    audioEngine.src = `https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3?instance=${videoId}`;
-    
-    audioEngine.load();
-    
-    var playPromise = audioEngine.play();
-    if (playPromise !== undefined) {
-      playPromise.then(_ => {
-        if ('mediaSession' in navigator) {
-          navigator.mediaSession.metadata = new MediaMetadata({
-            title: title,
-            artist: channel,
-            album: "V's Audio Matrix Selection",
-            artwork: [{ src: item.snippet?.thumbnails?.medium?.url || '', sizes: '258x258', type: 'image/jpeg' }]
-          });
-        }
-      }).catch(err => {
-        console.log("Audio target loop interaction scheduled on next frame viewport interaction.");
-      });
-    }
-
+    // Avoid lag / wrong‑song: always call loadVideoById BEFORE playVideo, never double‑load
+    player.stopVideo();
+    player.loadVideoById(videoId);
+    player.playVideo();
     updatePlayPauseButton();
   }
 
   function togglePlay() {
-    if (currentIndex === -1) return;
-    if (audioEngine.paused) {
-      audioEngine.play();
-    } else {
-      audioEngine.pause();
-    }
+    if (!playerReady || currentIndex === -1) return;
+    const state = player.getPlayerState();
+    if (state === YT.PlayerState.PLAYING) player.pauseVideo();
+    else player.playVideo();
     updatePlayPauseButton();
   }
 
   function updatePlayPauseButton() {
     const btn = document.getElementById("playPauseBtn");
-    btn.textContent = audioEngine.paused ? "▶" : "⏸";
+    if (!playerReady) {
+      btn.textContent = "▶";
+      return;
+    }
+    const st = player.getPlayerState();
+    btn.textContent = (st === YT.PlayerState.PLAYING) ? "⏸" : "▶";
   }
 
   function nextSong() {
@@ -719,8 +724,8 @@
   function prevSong() {
     const list = getActiveList();
     if (!list.length) return;
-    if (audioEngine.currentTime > 3) {
-      audioEngine.currentTime = 0;
+    if (playerReady && player.getCurrentTime() > 3) {
+      player.seekTo(0, true);
       return;
     }
     let prevIndex = currentIndex - 1;
@@ -742,20 +747,39 @@
   }
 
   function changeSpeed() {
+    if (!playerReady) return;
     const rate = parseFloat(document.getElementById("speedSelect").value);
-    audioEngine.playbackRate = rate;
+    player.setPlaybackRate(rate);
   }
 
   document.getElementById("volume").addEventListener("input", e => {
+    if (!playerReady) return;
     const v = parseInt(e.target.value, 10) || 0;
-    audioEngine.volume = v / 100;
+    player.setVolume(v);
   });
 
   document.getElementById("progress").addEventListener("input", e => {
+    if (!playerReady) return;
     const percent = parseFloat(e.target.value);
-    if (!audioEngine.duration || audioEngine.duration <= 0) return;
-    audioEngine.currentTime = (percent / 100) * audioEngine.duration;
+    const duration = player.getDuration();
+    if (!duration || duration <= 0) return;
+    const seek = (percent / 100) * duration;
+    player.seekTo(seek, true);
   });
+
+  function setupProgressTimer() {
+    if (window.__progressInterval) clearInterval(window.__progressInterval);
+    window.__progressInterval = setInterval(() => {
+      if (!playerReady || !player.getDuration) return;
+      const duration = player.getDuration();
+      if (!duration || duration <= 0) return;
+      const currentTime = player.getCurrentTime();
+      const percent = (currentTime / duration) * 100;
+      document.getElementById("currentTime").textContent = formatTime(currentTime);
+      document.getElementById("duration").textContent = formatTime(duration);
+      document.getElementById("progress").value = percent;
+    }, 500);
+  }
 
   function formatTime(sec) {
     if (!sec || isNaN(sec)) return "0:00";
@@ -775,9 +799,9 @@
       e.preventDefault();
       togglePlay();
     } else if (e.code === "ArrowRight") {
-      audioEngine.currentTime = Math.min(audioEngine.duration, audioEngine.currentTime + 5);
+      if (playerReady) player.seekTo(player.getCurrentTime() + 5, true);
     } else if (e.code === "ArrowLeft") {
-      audioEngine.currentTime = Math.max(0, audioEngine.currentTime - 5);
+      if (playerReady) player.seekTo(Math.max(0, player.getCurrentTime() - 5), true);
     }
   });
 
